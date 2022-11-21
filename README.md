@@ -56,3 +56,18 @@
 - Dans le fichier `project/.env` commenter `# DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=14&charset=utf8"` et décommenter `DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"` / In the `project/.env` file comment `# DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=14&charset=utf8"` and uncomment `DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"`
 - Mettre à jour la ligne `DATABASE_URL="mysql://root:@db_symfony_blog:3306/symfony?serverVersion=5.7&charset=utf8mb4"` / Update the line `DATABASE_URL="mysql://root:@db_symfony_blog:3306/symfony?serverVersion=5.7&charset=utf8mb4"`
 - Dans le terminal taper `make database-create` pour créer la base de donné symfony / In the terminal type `make database-create` to create the symfony database
+
+
+## The test environment
+
+### Steps
+- Après avoir configurer la base de donnée, écrire dans le terminal `make database-init-test` pour créer la base de donnée symfony_test / After configuring the database, write in the terminal `make database-init-test` to create the symfony_test database
+- Créer un dossier `Unit` et un dossier `Functional` dans le dossier `project/tests` / Create a `Unit` folder and a `Functional` folder in the `project/tests` folder
+- Créer un fichier `BasicTest.php` dans le fichier `project/tests/Unit` avec comme classe `class BasicTest extends KernelTestCase{}` et une fonction qui comprend `$this->assertTrue(true);` / Create a `BasicTest.php` file in the `project/tests/Unit` file with the class `class BasicTest extends KernelTestCase{}` and a function that includes `$this->assertTrue(true);`
+- Taper dans le terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` pour exécuter le test et vérifier si c'est Ok / Type in the terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` to run the test and check if it is Ok
+- Créer un fichier `BasicTest.php` dans le fichier `project/tests/Functional` avec comme classe `class BasicTest extends WebTestCase{}` et une fonction qui comprend `$client = static::createClient(); $client->request(Request::METHOD_GET, '/'); $this->assertResponseIsSuccessful();` / Create a `BasicTest.php` file in the `project/tests/Functional` file with class `class BasicTest extends WebTestCase{}` and a function that includes `$client = static::createClient(); $client->request(Request::METHOD_GET, '/'); $this->assertResponseIs Successful();`
+- Taper dans le terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` ou `docker exec -w /var/www/project www_symfony_blog php bin/phpunit --testdox` pour plus de détails / Type in the terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` or `docker exec -w /var/www/project www_symfony_blog php bin/phpunit --testdox` for more details
+
+
+
+
