@@ -92,4 +92,35 @@ A field is characterized by:
 ## Slugify by Cocur
 
 ### Commands
-- `docker exec -w /var/www/project www_symfony_blog composer req cocur/slugify` (Instaler Cocur/Slugify / Install Cocur/Slugify) ``https://github.com/cocur/slugify``
+- `docker exec -w /var/www/project www_symfony_blog composer req cocur/slugify` (Installer Cocur/Slugify / Install Cocur/Slugify) ``https://github.com/cocur/slugify``
+
+
+## VichUploader
+- `docker exec -w /var/www/project www_symfony_blog composer req vich/uploader-bundle` (Installer VichUploader / Install VichUploader) ``https://github.com/dustin10/VichUploaderBundle`
+- Vérifier dans le fichier `project/config/bundles.php` si la ligne `Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],` sinon la rajouter / Check in the file `project/config/bundles.php` if the line `Vich\UploaderBundle::class => ['all' => true],` otherwise add it
+- Vérifier dans le dossier `project/config/packages` s'il y a le fichier `vich_uploader.yaml` sinon le créer manuellement avec comme contenu: 
+`vich_uploader:
+  db_driver: orm
+  
+  metadata:
+    type: attribute
+
+  mappings:
+    post_thumbnail:
+      uri_prefix: /images/posts
+      upload_destination: "%kernel.project_dir%/public/images/posts"
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer`
+
+Check in the folder `project/config/packages` if there is the file `vich_uploader.yaml` otherwise create it manually with the content:
+`vich_uploader:
+  db_driver: orm
+  
+  metadata:
+    type: attribute
+
+  mappings:
+    post_thumbnail:
+      uri_prefix: /images/posts
+      upload_destination: "%kernel.project_dir%/public/images/posts"
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer`
+- Créer une nouvelle entité `php bin/console make:entity Thumbnail` / Create a new entity `php bin/console make:entity Thumbnail`
