@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Cocur\Slugify\Slugify;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -49,17 +50,26 @@ class Post
         /**
          * Construction: Date
          */
-        private function __construct()
+        public function __construct()
         {
             $this->updatedAt = new \DateTimeImmutable();
             $this->createdAt = new \DateTimeImmutable();
         }
 
         /**
+         * Lifecycle: Persist
+         */
+        #[ORM\PrePersist] 
+        public function prePersist()
+        {
+            $this->slug = (new Slugify())->slugify($this->title);
+        }
+
+        /**
          * Lifecycle: Update
          */
         #[ORM\PreUpdate]
-        private function preUpdate()
+        public function preUpdate()
         {
             $this->updatedAt = new \DateTimeImmutable();
         }

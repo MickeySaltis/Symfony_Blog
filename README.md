@@ -89,5 +89,7 @@ A field is characterized by:
 - Taper dans le terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` ou `docker exec -w /var/www/project www_symfony_blog php bin/phpunit --testdox` pour plus de détails / Type in the terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` or `docker exec -w /var/www/project www_symfony_blog php bin/phpunit --testdox` for more details
 
 
+## Slugify by Cocur
 
-
+### Commands
+- `docker exec -w /var/www/project www_symfony_blog composer req cocur/slugify` (Instaler Cocur/Slugify / Install Cocur/Slugify) ``https://github.com/cocur/slugify``
