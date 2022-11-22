@@ -25,6 +25,26 @@
 - `docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www dans docker / Open the www container terminal in docker)
 - `sudo chown -R $USER ./` | `sudo chown -R project` (Changer le propriétaire du dossier / Change the owner of the file)
 
+#### Entity (Create / Migration / Migrate)
+- `php bin/console make:entity [name of the entity]` (Créer une entitée / Create a entity)
+- `make migration` (Créer un fichier SQL destiné à mettre à jour la base de donnée / Create a SQL file to update the database)
+- `make migrate` (Mettre à jour la base de donnée avec le fichier de migration / Update the database with the migration file)
+
+##### Composition of the entity
+Une entité est une classe PHP, qui peut être connectée à une table de la base de donnée via l'ORM, elle est accompagné d'une fichier "Repository". Une entité contient plusieurs champs dont un qui est son "identifiant"(Id, clé primaire et auto-incrémenté).
+Un champ est caractérisé par:
+- son type
+- sa taille
+- s'il peut être null ou non
+- s'il doit être unique ou non
+
+An entity is a PHP class, which can be connected to a table of the database via the ORM, it is accompanied by a "Repository" file. An entity contains several fields, one of which is its "identifier" (Id, primary key and auto-incremented).
+A field is characterized by:
+- its type
+- its size
+- whether it can be null or not
+- whether it must be unique or not
+
 
 ## Makefile
 
