@@ -1,5 +1,16 @@
 # Symfony_Blog
 
+## Table
+1. [Environment Docker](#Environment Docker)
+2. [Symfony](#Symfony)
+3. [Twig](#Twig)
+4. [Webpack Encore](#Webpack Encore)
+5. [Database with the ORM](#Database with the ORM)
+6. [The test environment](#The test environment)
+7. [Slugify by Cocur](#Slugify by Cocur)
+8. [VichUploader](#VichUploader)
+9. [Tailwind CSS with Postcss & Autoprefixer](#Tailwind CSS with Postcss & Autoprefixer)
+10. [Tailwind Elements](#Tailwind Elements)
 
 ## Environment Docker
 
@@ -36,7 +47,7 @@ Un champ est caractérisé par:
 - son type
 - sa taille
 - s'il peut être null ou non
-- s'il doit être unique ou non
+- s'il doit être unique ou non  
 
 An entity is a PHP class, which can be connected to a table of the database via the ORM, it is accompanied by a "Repository" file. An entity contains several fields, one of which is its "identifier" (Id, primary key and auto-incremented).
 A field is characterized by:
@@ -49,9 +60,15 @@ A field is characterized by:
 
 ##### Commands
 - `docker exec -w /var/www/project www_symfony_blog composer req --dev orm-fixtures` (Installer Fixture / Install Fixture)
-- `docker exec -w /var/www/project www_symfony_blog composer req --dev fakerphp/faker` (Installer FakerPHP/Faker / Install FakerPHP/Faker) ``https://fakerphp.github.io/``
+- `docker exec -w /var/www/project www_symfony_blog composer req --dev fakerphp/faker` (Installer FakerPHP/Faker / Install FakerPHP/Faker) [FakerPhp](https://fakerphp.github.io/)
 - Coder pour générer les Fixtures dans le dossier `project/src/DataFixtures` / Code to generate Fixtures in the `project/src/DataFixtures` folder
 - `make database-init` (Initier la base de donnée / Initiate the database)
+
+
+## Twig
+
+### Twig String-Extra
+- `docker exec -w /var/www/project www_symfony_blog composer req twig/string-extra` (Installer Twig String-Extra / Install Twig String-Extra) [Twig String-Extra](https://github.com/twigphp/string-extra)
 
 
 ## Makefile
@@ -63,8 +80,8 @@ A field is characterized by:
 ## Webpack Encore
 
 ### Steps
-- Installer Webpack Encore / Install Webpack Encore
-- Installer Npm / Install Npm
+- Installer Webpack Encore / Install Webpack Encore [Webpack Encore](https://symfony.com/doc/current/frontend.html)
+- Installer Npm / Install Npm [Npm](https://www.npmjs.com/)
 - Dans le fichier 'project/assets/app.js' inscrire `console.log(`Webpack Encore is working`);` / In the file 'project/assets/app.js' write `console.log(`Webpack Encore is working`);`
 - Lancer un script Npm / Run an Npm script
 - Regarder dans la console si le message 'Webpack Encore is working' remonte / Look in the console if the 'Webpack Encore is working' message comes up
@@ -100,14 +117,15 @@ A field is characterized by:
 ## Slugify by Cocur
 
 ### Commands
-- `docker exec -w /var/www/project www_symfony_blog composer req cocur/slugify` (Installer Cocur/Slugify / Install Cocur/Slugify) ``https://github.com/cocur/slugify``
+- `docker exec -w /var/www/project www_symfony_blog composer req cocur/slugify` (Installer Cocur/Slugify / Install Cocur/Slugify) [Cocur Slugify](https://github.com/cocur/slugify)
 
 
 ## VichUploader
-- `docker exec -w /var/www/project www_symfony_blog composer req vich/uploader-bundle` (Installer VichUploader / Install VichUploader) ``https://github.com/dustin10/VichUploaderBundle`
+- `docker exec -w /var/www/project www_symfony_blog composer req vich/uploader-bundle` (Installer VichUploader / Install VichUploader) [Vich Uploader](https://github.com/dustin10/VichUploaderBundle)
 - Vérifier dans le fichier `project/config/bundles.php` si la ligne `Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],` sinon la rajouter / Check in the file `project/config/bundles.php` if the line `Vich\UploaderBundle::class => ['all' => true],` otherwise add it
 - Vérifier dans le dossier `project/config/packages` s'il y a le fichier `vich_uploader.yaml` sinon le créer manuellement avec comme contenu: 
-`vich_uploader:
+```
+vich_uploader:
   db_driver: orm
   
   metadata:
@@ -117,10 +135,12 @@ A field is characterized by:
     post_thumbnail:
       uri_prefix: /images/posts
       upload_destination: "%kernel.project_dir%/public/images/posts"
-      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer`
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+```  
 
 Check in the folder `project/config/packages` if there is the file `vich_uploader.yaml` otherwise create it manually with the content:
-`vich_uploader:
+```
+vich_uploader:
   db_driver: orm
   
   metadata:
@@ -130,46 +150,55 @@ Check in the folder `project/config/packages` if there is the file `vich_uploade
     post_thumbnail:
       uri_prefix: /images/posts
       upload_destination: "%kernel.project_dir%/public/images/posts"
-      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer`
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+``` 
 - Créer une nouvelle entité `php bin/console make:entity Thumbnail` / Create a new entity `php bin/console make:entity Thumbnail`
 
 
 ## Tailwind CSS with Postcss & Autoprefixer
--`docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
+- `docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
 -`cd project` (Se déplacer dans le dossier Project / Move to the Project folder)
-- `npm install -D tailwindcss postcss autoprefixer` (Installer Tailwind CSS, Postcss et Autoprefixer / Install Tailwind CSS, Postcss and Autoprefixer)
+- `npm install -D tailwindcss postcss autoprefixer` (Installer [Tailwind CSS](https://tailwindcss.com/), [Postcss](https://postcss.org/) et [Autoprefixer](https://www.npmjs.com/package/autoprefixer) / Install Tailwind CSS, Postcss and Autoprefixer)
 -`npx tailwindcss init` (Initier Tailwind CSS / Initiate Tailwind CSS)
 - Dans le dossier `project/tailwind.config.js` rajouter les chemins des templates et scripts js dans le `content` (exemple: `'templates/**/*.html.twig'`, `'assets/scripts/*.js'`) / In the `project/tailwind.config.js` folder add the paths to the templates and js scripts in the `content` (example: `'templates/**/*.html.twig'`, `'assets/scripts/*.js'`)
 - `npm install -D postcss-loader` (Installer les packages de postcss / Install the postcss packages)
 - Dans le fichier `project/webpack.config.js` ajouter la ligne `.enablePostCssLoader()` / In the file `project/webpack.config.js` add the line `.enablePostCssLoader()`
 - Créer un fichier `postcss.config.js` à la racine du dossier `project`. Et rajouter les lignes suivantes:
-  `module.exports = {
+```
+  module.exports = {
       plugins: {
           tailwindcss: {},
           autoprefixer: {}
       }
-  };`
+  };
+```
 Create a `postcss.config.js` file in the root of the `project` folder. And add the following lines:
-  `module.exports = {
+```
+  module.exports = {
       plugins: {
           tailwindcss: {},
           autoprefixer: {}
       }
-  };`
+  };
+```
 - Dans le fichier ``project/assets/styles/app.css`` ajouter les lignes suivante:
-  `@tailwind base;
+```
+  @tailwind base;
   @tailwind components;
-  @tailwind utilities;`
+  @tailwind utilities;
+```
   In the file ``project/assets/styles/app.css`` add the following lines:
-  `@tailwind base;
+```
+  @tailwind base;
   @tailwind components;
-  @tailwind utilities;`
+  @tailwind utilities;
+```
 - `make npm-watch`
 
 ## Tailwind Elements
 - `docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
 - `cd project` (Se déplacer dans le dossier Project / Move to the Project folder)
-- `npm install tw-elements` (Installer Tailwind Elements / Install Tailwind Elements)
+- `npm install tw-elements` (Installer [Tailwind Elements](https://tailwind-elements.com/quick-start/) / Install Tailwind Elements)
 - Dans le fichier `project/tailwind.config.json` rajouter la ligne `'node_modules/tw-elements/dist/js/**/*.js'` dans `content` et `require('tw-elements/dist/plugin')` dans `plugins` / In the file `project/tailwind.config.json` add the line `'node_modules/tw-elements/dist/js/**/*.js'` in `content` and `require('tw-elements/dist/plugin')` in `plugins`
 - Dans le fichier `project/assets/app.js` ajouter la ligne `import 'tw-elements';` / In the file `project/assets/app.js` add the line `import 'tw-elements';`
 - `make npm-watch`
