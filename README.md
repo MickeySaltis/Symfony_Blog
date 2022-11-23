@@ -17,7 +17,7 @@
 
 ## Symfony
 
-## Composition
+### Composition
 - project (Dossier racine du projet Symfony / Symfony project root folder)
 
 ### Commands
@@ -44,6 +44,16 @@ A field is characterized by:
 - its size
 - whether it can be null or not
 - whether it must be unique or not
+
+#### Fixture && FakerPHP/Faker
+
+##### Commands
+- `docker exec -w /var/www/project www_symfony_blog composer req --dev orm-fixtures` (Installer Fixture / Install Fixture)
+- `docker exec -w /var/www/project www_symfony_blog composer req --dev fakerphp/faker` (Installer FakerPHP/Faker / Install FakerPHP/Faker) ``https://fakerphp.github.io/``
+- Coder pour générer les Fixtures dans le dossier `project/src/DataFixtures` / Code to generate Fixtures in the `project/src/DataFixtures` folder
+- `make database-init` (Initier la base de donnée / Initiate the database)
+
+
 
 
 ## Makefile

@@ -88,11 +88,11 @@ database-init: ## Lancer la base de données / Init database
 	$(MAKE) database-migrate
 	$(MAKE) database-fixtures-load
 
-database-drop: ## Créer une base de données / Create database
-	$(SYMFONY_CONSOLE) d:d:d --force --if-exists
-
 database-create: ## Créer une base de données / Create database
 	$(SYMFONY_CONSOLE) d:d:c --if-not-exists
+
+database-drop: ## Suppression de la base de données / Database drop
+	$(SYMFONY_CONSOLE) d:d:d --force --if-exists
 
 database-remove: ## Abandon de la base de données / Drop database
 	$(SYMFONY_CONSOLE) d:d:d --force --if-exists

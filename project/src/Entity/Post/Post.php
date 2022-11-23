@@ -34,7 +34,7 @@ class Post
         #[Assert\NotBlank()]
         private string $slug;
 
-        #[ORM\Column(type: 'text', length: 255)]
+        #[ORM\Column(type: 'text')]
         #[Assert\NotBlank()]
         private string $content;
 
@@ -117,9 +117,10 @@ class Post
         }
         public function setContent(string $content): self
         {
-            $this->slug = $content;
+            $this->content = $content;
             return $this;
         }
+
 
         public function getState(): ?string
         {
