@@ -54,8 +54,6 @@ A field is characterized by:
 - `make database-init` (Initier la base de donnée / Initiate the database)
 
 
-
-
 ## Makefile
 
 ### Composition
@@ -134,3 +132,44 @@ Check in the folder `project/config/packages` if there is the file `vich_uploade
       upload_destination: "%kernel.project_dir%/public/images/posts"
       namer: Vich\UploaderBundle\Naming\SmartUniqueNamer`
 - Créer une nouvelle entité `php bin/console make:entity Thumbnail` / Create a new entity `php bin/console make:entity Thumbnail`
+
+
+## Tailwind CSS with Postcss & Autoprefixer
+-`docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
+-`cd project` (Se déplacer dans le dossier Project / Move to the Project folder)
+- `npm install -D tailwindcss postcss autoprefixer` (Installer Tailwind CSS, Postcss et Autoprefixer / Install Tailwind CSS, Postcss and Autoprefixer)
+-`npx tailwindcss init` (Initier Tailwind CSS / Initiate Tailwind CSS)
+- Dans le dossier `project/tailwind.config.js` rajouter les chemins des templates et scripts js dans le `content` (exemple: `'templates/**/*.html.twig'`, `'assets/scripts/*.js'`) / In the `project/tailwind.config.js` folder add the paths to the templates and js scripts in the `content` (example: `'templates/**/*.html.twig'`, `'assets/scripts/*.js'`)
+- `npm install -D postcss-loader` (Installer les packages de postcss / Install the postcss packages)
+- Dans le fichier `project/webpack.config.js` ajouter la ligne `.enablePostCssLoader()` / In the file `project/webpack.config.js` add the line `.enablePostCssLoader()`
+- Créer un fichier `postcss.config.js` à la racine du dossier `project`. Et rajouter les lignes suivantes:
+  `module.exports = {
+      plugins: {
+          tailwindcss: {},
+          autoprefixer: {}
+      }
+  };`
+Create a `postcss.config.js` file in the root of the `project` folder. And add the following lines:
+  `module.exports = {
+      plugins: {
+          tailwindcss: {},
+          autoprefixer: {}
+      }
+  };`
+- Dans le fichier ``project/assets/styles/app.css`` ajouter les lignes suivante:
+  `@tailwind base;
+  @tailwind components;
+  @tailwind utilities;`
+  In the file ``project/assets/styles/app.css`` add the following lines:
+  `@tailwind base;
+  @tailwind components;
+  @tailwind utilities;`
+- `make npm-watch`
+
+## Tailwind Elements
+- `docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
+- `cd project` (Se déplacer dans le dossier Project / Move to the Project folder)
+- `npm install tw-elements` (Installer Tailwind Elements / Install Tailwind Elements)
+- Dans le fichier `project/tailwind.config.json` rajouter la ligne `'node_modules/tw-elements/dist/js/**/*.js'` dans `content` et `require('tw-elements/dist/plugin')` dans `plugins` / In the file `project/tailwind.config.json` add the line `'node_modules/tw-elements/dist/js/**/*.js'` in `content` and `require('tw-elements/dist/plugin')` in `plugins`
+- Dans le fichier `project/assets/app.js` ajouter la ligne `import 'tw-elements';` / In the file `project/assets/app.js` add the line `import 'tw-elements';`
+- `make npm-watch`

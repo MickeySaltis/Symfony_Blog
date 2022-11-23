@@ -7,8 +7,9 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+import 'tw-elements';
 
 // start the Stimulus application
 // import './bootstrap';
 
-console.log(`Webpack Encore is working`);
+// console.log(`Webpack Encore is working`);
