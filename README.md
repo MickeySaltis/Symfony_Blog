@@ -13,7 +13,7 @@
 10. [Tailwind Elements](#Tailwind_Elements)
 11. [KNP Paginator](#KNP_Paginator)
 
-## Environment Docker
+## Environment_Docker
 
 ### Composition
 - docker-compose.yml (Configuration des services de l'application / Configuration of the application services)
@@ -57,7 +57,7 @@ A field is characterized by:
 - whether it can be null or not
 - whether it must be unique or not
 
-#### Fixture && FakerPHP/Faker
+#### Fixture_&&_FakerPHP/Faker
 
 ##### Commands
 - `docker exec -w /var/www/project www_symfony_blog composer req --dev orm-fixtures` (Installer Fixture / Install Fixture)
@@ -78,7 +78,7 @@ A field is characterized by:
 - Makefile (Fichier contenant des groupes de commandes / File containing groups of commands)
 
 
-## Webpack Encore
+## Webpack_Encore
 
 ### Steps
 - Installer Webpack Encore / Install Webpack Encore [Webpack Encore](https://symfony.com/doc/current/frontend.html)
@@ -96,7 +96,7 @@ A field is characterized by:
 - `docker exec -w /var/www/project www_symfony_blog npm run build` (Lancer le script build de Npm dans le dossier racine de Symfony dans le container www / Run the build Npm script in the root folder of Symfony in the www container)
 
 
-## Database with the ORM
+## Database_with_the_ORM
 
 ### Steps
 - Dans le fichier `project/.env` commenter `# DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=14&charset=utf8"` et décommenter `DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"` / In the `project/.env` file comment `# DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=14&charset=utf8"` and uncomment `DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"`
@@ -104,7 +104,7 @@ A field is characterized by:
 - Dans le terminal taper `make database-create` pour créer la base de donné symfony / In the terminal type `make database-create` to create the symfony database
 
 
-## The test environment
+## The_test_environment
 
 ### Steps
 - Après avoir configurer la base de donnée, écrire dans le terminal `make database-init-test` pour créer la base de donnée symfony_test / After configuring the database, write in the terminal `make database-init-test` to create the symfony_test database
@@ -114,8 +114,64 @@ A field is characterized by:
 - Créer un fichier `BasicTest.php` dans le fichier `project/tests/Functional` avec comme classe `class BasicTest extends WebTestCase{}` et une fonction qui comprend `$client = static::createClient(); $client->request(Request::METHOD_GET, '/'); $this->assertResponseIsSuccessful();` / Create a `BasicTest.php` file in the `project/tests/Functional` file with class `class BasicTest extends WebTestCase{}` and a function that includes `$client = static::createClient(); $client->request(Request::METHOD_GET, '/'); $this->assertResponseIs Successful();`
 - Taper dans le terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` ou `docker exec -w /var/www/project www_symfony_blog php bin/phpunit --testdox` pour plus de détails / Type in the terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` or `docker exec -w /var/www/project www_symfony_blog php bin/phpunit --testdox` for more details
 
+### Functional testing
 
-## Slugify by Cocur
+#### Testing a simple static page
+- Créer un dossier `Post` avec un fichier `PostTest.php` dans le dossier `project/tests/Functional` et le coder / Create a `Post` folder with a `PostTest.php` file in the `project/tests/Functional` folder and code it
+```
+<?php
+
+namespace App\Tests\Functional\Post;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+class PostTest extends WebTestCase
+{
+    public function testBlogPageWorks(): void 
+    {
+        $client = static::createClient();
+        $client->request(Request::METHOD_GET, '/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorExists('h1');
+        $this->assertSelectorTextContains('h1', 'Un blog avec Symfony');
+    }
+}
+```
+- `make tests` (Exécuter tous les tests / Run all tests)
+
+#### Test a pagination
+- Sur le fichier `PostTest.php` dans le dossier `project/tests/Functional/Post` coder la fonction / On the file `PostTest.php` in the folder `project/tests/Functional/Post` code the function
+```
+public function testPaginationWorks(): void 
+        {
+            $client = static::createClient();
+            $crawler = $client->request(Request::METHOD_GET, '/');
+
+            $this->assertResponseIsSuccessful();
+            $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+            $posts = $crawler->filter('div.card');
+            $this->assertEquals(9, count($posts));
+
+            $link = $crawler->selectLink('2')->extract(['href'])[0];
+            $crawler = $client->request(Request::METHOD_GET, $link);
+
+            $this->assertResponseIsSuccessful();
+            $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+            $posts = $crawler->filter('div.card');
+            $this->assertGreaterThanOrEqual(1, count($posts));
+        }
+```
+- `make tests` (Exécuter tous les tests / Run all tests)
+
+
+## Slugify_by_Cocur
 
 ### Installer
 - `docker exec -w /var/www/project www_symfony_blog composer req cocur/slugify` (Installer Cocur/Slugify / Install Cocur/Slugify) [Cocur Slugify](https://github.com/cocur/slugify)
@@ -158,7 +214,7 @@ vich_uploader:
 - Créer une nouvelle entité `php bin/console make:entity Thumbnail` / Create a new entity `php bin/console make:entity Thumbnail`
 
 
-## Tailwind CSS with Postcss & Autoprefixer
+## Tailwind_CSS_with_Postcss_&_Autoprefixer
 
 ### Install and configure
 - `docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
@@ -200,7 +256,7 @@ Create a `postcss.config.js` file in the root of the `project` folder. And add t
 ```
 - `make npm-watch`
 
-## Tailwind Elements
+## Tailwind_Elements
 
 ### Install and configure
 - `docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
