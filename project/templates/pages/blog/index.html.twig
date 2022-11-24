@@ -4,28 +4,18 @@
 {% block body %} 
     <div class="container mx-auto">
         <h1 class="text-5xl text-center mt-24 mb-8">Un blog avec Symfony</h1>
+
+        <!-- Loop Card Post -->
         <div class="flex flex-row flex-wrap justify-evenly mt-8">
-
-            <!-- Loop Card Post -->
             {% for post in posts %}
-                <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 my-8 mr-4">
-                    {% if post.thumbnail %}
-                        <a href="">
-                            <img src="{{ vich_uploader_asset(post.thumbnail, 'imageFile') }}" alt="{{ post.thumbnail.imageName }}" class="rounded-t-lg">
-                        </a>
-                    {% endif %}
-                    <div class="p-5">
-                        <a href="#">
-                            <h5 class="mb-2 text-2xl font bold tracking-tight text-gray-900 dark:text-white"> {{post.title}}</h5>
-                        </a>
-                        <p class="text-gray-700 text-base mb-4">
-                            {{post.content|u.truncate(160,"...")}}
-                        </p>
-                        <button type="button" class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Lire plus </button>
-                    </div>
-                </div>
+                {% include "components/_card.html.twig" with {post: post} only %}
             {% endfor %}
-
         </div>
+
+        <!-- Pagination -->
+        <div class="navigation flex justify-center mb-8">
+            {{ knp_pagination_render(posts) }}
+        </div>
+
     </div>
 {% endblock %}

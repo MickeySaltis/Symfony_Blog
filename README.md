@@ -1,16 +1,17 @@
 # Symfony_Blog
 
 ## Table
-1. [Environment Docker](#Environment Docker)
+1. [Environment Docker](#Environment_Docker)
 2. [Symfony](#Symfony)
 3. [Twig](#Twig)
-4. [Webpack Encore](#Webpack Encore)
-5. [Database with the ORM](#Database with the ORM)
-6. [The test environment](#The test environment)
-7. [Slugify by Cocur](#Slugify by Cocur)
+4. [Webpack Encore](#Webpack_Encore)
+5. [Database with the ORM](#Database_with_the_ORM)
+6. [The test environment](#The_test_environment)
+7. [Slugify by Cocur](#Slugify_by_Cocur)
 8. [VichUploader](#VichUploader)
-9. [Tailwind CSS with Postcss & Autoprefixer](#Tailwind CSS with Postcss & Autoprefixer)
-10. [Tailwind Elements](#Tailwind Elements)
+9. [Tailwind CSS with Postcss & Autoprefixer](#Tailwind_CSS_with_Postcss_&_Autoprefixer)
+10. [Tailwind Elements](#Tailwind_Elements)
+11. [KNP Paginator](#KNP_Paginator)
 
 ## Environment Docker
 
@@ -116,11 +117,13 @@ A field is characterized by:
 
 ## Slugify by Cocur
 
-### Commands
+### Installer
 - `docker exec -w /var/www/project www_symfony_blog composer req cocur/slugify` (Installer Cocur/Slugify / Install Cocur/Slugify) [Cocur Slugify](https://github.com/cocur/slugify)
 
 
 ## VichUploader
+
+### Install and configure
 - `docker exec -w /var/www/project www_symfony_blog composer req vich/uploader-bundle` (Installer VichUploader / Install VichUploader) [Vich Uploader](https://github.com/dustin10/VichUploaderBundle)
 - Vérifier dans le fichier `project/config/bundles.php` si la ligne `Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],` sinon la rajouter / Check in the file `project/config/bundles.php` if the line `Vich\UploaderBundle::class => ['all' => true],` otherwise add it
 - Vérifier dans le dossier `project/config/packages` s'il y a le fichier `vich_uploader.yaml` sinon le créer manuellement avec comme contenu: 
@@ -156,6 +159,8 @@ vich_uploader:
 
 
 ## Tailwind CSS with Postcss & Autoprefixer
+
+### Install and configure
 - `docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
 -`cd project` (Se déplacer dans le dossier Project / Move to the Project folder)
 - `npm install -D tailwindcss postcss autoprefixer` (Installer [Tailwind CSS](https://tailwindcss.com/), [Postcss](https://postcss.org/) et [Autoprefixer](https://www.npmjs.com/package/autoprefixer) / Install Tailwind CSS, Postcss and Autoprefixer)
@@ -196,9 +201,38 @@ Create a `postcss.config.js` file in the root of the `project` folder. And add t
 - `make npm-watch`
 
 ## Tailwind Elements
+
+### Install and configure
 - `docker exec -ti www_symfony_blog bash` (Ouvrir le terminal du container www / Open the container terminal www )
 - `cd project` (Se déplacer dans le dossier Project / Move to the Project folder)
 - `npm install tw-elements` (Installer [Tailwind Elements](https://tailwind-elements.com/quick-start/) / Install Tailwind Elements)
 - Dans le fichier `project/tailwind.config.json` rajouter la ligne `'node_modules/tw-elements/dist/js/**/*.js'` dans `content` et `require('tw-elements/dist/plugin')` dans `plugins` / In the file `project/tailwind.config.json` add the line `'node_modules/tw-elements/dist/js/**/*.js'` in `content` and `require('tw-elements/dist/plugin')` in `plugins`
 - Dans le fichier `project/assets/app.js` ajouter la ligne `import 'tw-elements';` / In the file `project/assets/app.js` add the line `import 'tw-elements';`
 - `make npm-watch`
+
+
+## KNP_Paginator
+
+### Install and configure
+- `docker exec -w /var/www/project www_symfony_blog composer req knplabs/knp-paginator-bundle` (Installer [KNP Paginator](https://github.com/KnpLabs/KnpPaginatorBundle) / Install KNP Paginator)
+- Dans le dossier `project/config` créer un fichier `knp_paginator.yaml` / In the `project/config` folder create a `knp_paginator.yaml` file
+- Indiquer dans ce fichier / Indicate in this file:
+```
+knp_paginator:
+    page_range: 5 
+    default_options:
+        page_name: page                
+        sort_field_name: sort           
+        sort_direction_name: direction  
+        distinct: true                  
+        filter_field_name: filterField  
+        filter_value_name: filterValue  
+    template:
+        pagination: '@KnpPaginator/Pagination/sliding.html.twig'     
+        sortable: '@KnpPaginator/Pagination/sortable_link.html.twig' 
+        filtration: '@KnpPaginator/Pagination/filtration.html.twig'  
+```
+
+### Personaliser la pagination
+- Dans le fichier `project/config/packages/knp_paginator.yaml` modifier la ligne `pagination` de `template` avec les noms des fichiers situé dans le dossier `project/vendor/knplabs/knp-paginator-bundle/templates/Pagination`. Exemple: `@KnpPaginator/Pagination/tailwindcss_pagination.html.twig`. Ou créer un fichier et mettre à jour le fichier `project/config/packages/knp_paginator.yaml`. Exemple: `components/_pagination.html.twig` / In the `project/config/packages/knp_paginator.yaml` file modify the `pagination` line of `template` with the names of the files located in the `project/vendor/knplabs/knp-paginator-bundle/templates/Pagination` folder. Example: `@KnpPaginator/Pagination/tailwindcss_pagination.html.twig`. Or create a file and update the file `project/config/packages/knp_paginator.yaml`. Example: `components/_pagination.html.twig`
+
