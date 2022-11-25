@@ -148,25 +148,25 @@ class PostTest extends WebTestCase
 - Sur le fichier `PostTest.php` dans le dossier `project/tests/Functional/Post` coder la fonction / On the file `PostTest.php` in the folder `project/tests/Functional/Post` code the function
 ```
 public function testPaginationWorks(): void 
-        {
-            $client = static::createClient();
-            $crawler = $client->request(Request::METHOD_GET, '/');
+{
+    $client = static::createClient();
+    $crawler = $client->request(Request::METHOD_GET, '/');
 
-            $this->assertResponseIsSuccessful();
-            $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    $this->assertResponseIsSuccessful();
+    $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-            $posts = $crawler->filter('div.card');
-            $this->assertEquals(9, count($posts));
+    $posts = $crawler->filter('div.card');
+    $this->assertEquals(9, count($posts));
 
-            $link = $crawler->selectLink('2')->extract(['href'])[0];
-            $crawler = $client->request(Request::METHOD_GET, $link);
+    $link = $crawler->selectLink('2')->extract(['href'])[0];
+    $crawler = $client->request(Request::METHOD_GET, $link);
 
-            $this->assertResponseIsSuccessful();
-            $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    $this->assertResponseIsSuccessful();
+    $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-            $posts = $crawler->filter('div.card');
-            $this->assertGreaterThanOrEqual(1, count($posts));
-        }
+    $posts = $crawler->filter('div.card');
+    $this->assertGreaterThanOrEqual(1, count($posts));
+}
 ```
 - `make tests` (Exécuter tous les tests / Run all tests)
 
