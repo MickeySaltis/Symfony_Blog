@@ -14,7 +14,7 @@ class PostController extends AbstractController
     /**
      * Home: Displaying Posts
      */
-    #[Route('/', name:'post.index', methods: ['GET'])]
+    #[Route('/', name:'post_index', methods: ['GET'])]
     public function index(
         PostRepository $postRepository,
         Request $request

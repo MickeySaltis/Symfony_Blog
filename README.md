@@ -71,6 +71,15 @@ A field is characterized by:
 ### Twig String-Extra
 - `docker exec -w /var/www/project www_symfony_blog composer req twig/string-extra` (Installer Twig String-Extra / Install Twig String-Extra) [Twig String-Extra](https://github.com/twigphp/string-extra)
 
+#### Personaliser les pages d'erreurs
+
+##### Commands
+- `docker exec -w /var/www/project www_symfony_blog composer req symfony/twig-pack` (Installer Twig Pack / Install Twig Pack)
+- Créer les dossiers comme ceci dans le dossier `project/templates` / Create folders like this in the `project/templates` folder: `bundles/TwigBundle/Exception`
+- Créer ensuite les 3 fichiers `error.html.twig`, `error403.html.twig`, `error404.html.twig`dans le dossier `project/templates/bundles/TwigBundle/Exception` / Then create the 3 files `error.html.twig`, `error403.html.twig`, `error404.html.twig` in the folder `project/templates/bundles/TwigBundle/Exception`
+- Créer un fichier `_error.html.twig` dans le dossier `project/templates/layouts` et le personaliser avec `{{ exception.statusCode }}` et `{{ exception.statusText }}` / Create a `_error.html.twig` file in the `project/templates/layouts` folder and customize it with `{{ exception.statusCode }}` and `{{ exception.statusText }}` 
+- Rajouter la ligne `{% include "layouts/_error.html.twig" %}` dans les 3 fichiers situé dans le dossier `project/templates/bundles/TwigBundle/Exception` / Add the line `{% include "layouts/_error.html.twig" %}` in the 3 files located in the `project/templates/bundles/TwigBundle/Exception` folder
+
 
 ## Makefile
 
