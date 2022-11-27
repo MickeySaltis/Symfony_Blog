@@ -71,7 +71,7 @@ A field is characterized by:
 ### Twig String-Extra
 - `docker exec -w /var/www/project www_symfony_blog composer req twig/string-extra` (Installer Twig String-Extra / Install Twig String-Extra) [Twig String-Extra](https://github.com/twigphp/string-extra)
 
-#### Personaliser les pages d'erreurs
+### Personaliser les pages d'erreurs
 
 ##### Commands
 - `docker exec -w /var/www/project www_symfony_blog composer req symfony/twig-pack` (Installer Twig Pack / Install Twig Pack)
