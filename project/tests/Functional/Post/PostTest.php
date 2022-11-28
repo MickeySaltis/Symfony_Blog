@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class PostTest extends WebTestCase
 {
     /**
-     * Testing a simple static page
+     * Testing a simple static page (Home)
      */
         public function testBlogPageWorks(): void 
         {

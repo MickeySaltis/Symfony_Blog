@@ -5,6 +5,7 @@
 {% block body %}
     <div class="container mx-auto">
 
+        <!-- Title -->
         <div class="text-center my-10 ">
             <h1 class="text-6xl text-gray-900 dark:text-white">
                 {{post.title|capitalize}}
@@ -12,15 +13,21 @@
             <h2 class="mt-3">Publié le {{ post.createdAt|date('d/m/Y') }}</h2>
         </div>
 
+        <!-- Image -->
         {% if post.thumbnail %}
             <img class="max-w-lg h-auto rounded-lg transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0 shadow-xl dark:shadow-gray-800 my-3" src="{{ vich_uploader_asset(post.thumbnail, 'imageFile') }}" alt="{{ post.thumbnail.imageName }}">
         {% endif %}
 
+        <!-- Share on social networks -->
+        {% include "components/_share.html.twig" %}
+
+        <!-- Content -->
         <div class="mb-4 px-4">
             <p class="text-justify first-line:uppercase first-line:tracking-widest first-letter:text-7xl first-letter:font-bold first-letter:text-gray-900 dark:first-letter:text-gray-100 first-letter:mr-3 first-letter:float-left my-2"> {{ post.content }} </p>
             <p class="text-right my-8">Dernière mis à jour le {{ post.updatedAt|date('d/m/Y') }}
         </div>
 
+        <!-- Back -->
         <div class="flex justify-center">
             <a href="{{ path('post_index') }}" type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Retourner au blog</a>
         </div>
