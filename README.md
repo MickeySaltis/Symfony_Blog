@@ -112,6 +112,129 @@ A field is characterized by:
 - Mettre à jour la ligne `DATABASE_URL="mysql://root:@db_symfony_blog:3306/symfony?serverVersion=5.7&charset=utf8mb4"` / Update the line `DATABASE_URL="mysql://root:@db_symfony_blog:3306/symfony?serverVersion=5.7&charset=utf8mb4"`
 - Dans le terminal taper `make database-create` pour créer la base de donné symfony / In the terminal type `make database-create` to create the symfony database
 
+#### Association mapping
+- [Doctrine-project.org/association-mapping](https://www.doctrine-project.org/projects/doctrine-orm/en/2.9/reference/association-mapping.html)
+
+##### Many-To-Many, Unidirectional
+```
+<?php
+/** @Entity */
+class User
+{
+    // ...
+
+    /**
+     * Many Users have Many Groups.
+     * @ManyToMany(targetEntity="Group")
+     * @JoinTable(name="users_groups",
+     *      joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="group_id", referencedColumnName="id")}
+     *      )
+     */
+    private $groups;
+
+    // ...
+
+    public function __construct() {
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+}
+
+/** @Entity */
+class Group
+{
+    // ...
+}
+```
+
+##### Many-To-Many, Bidirectional
+```
+<?php
+/** @Entity */
+class Category
+{
+    // ...
+    use Doctrine\Common\Collections\Collection;
+    use Doctrine\Common\Collections\ArrayCollection;
+    use Doctrine\ORM\Mapping as ORM;
+    use Doctrine\ORM\Mapping\JoinTable;
+
+    #[ORM\ManyToMany(targetEntity: Post::class, inversedBy: 'categories')]
+    #[JoinTable(name: 'categories_posts')]
+    private Collection $posts;
+
+    public function __construct()
+    {
+      $this->posts = new ArrayCollection();
+    }
+
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+    
+    public function addPost(Post $post): self
+    {
+        if(!$this->posts->contains($post))
+        {
+            $this->posts[] = $post;
+        }
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        $this->posts->removeElement($post);
+        return $this;
+    }
+
+    // ...
+}
+
+/** @Entity */
+class Post
+{
+    // ...
+    use Doctrine\Common\Collections\Collection;
+    use Doctrine\Common\Collections\ArrayCollection;
+    use Doctrine\ORM\Mapping as ORM;
+
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'posts')]
+    private Collection $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
+
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if(!$this->categories->contains($category))
+        {
+            $this->categories[] = $category;
+            $category->addPost($this);
+        }
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if(!$this->categories->contains($category))
+        {
+            $category->removePost($this);
+        }
+        return $this;
+    }
+
+    // ...
+}
+```
+
 
 ## The_test_environment
 

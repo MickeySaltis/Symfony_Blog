@@ -2,11 +2,13 @@
 
 namespace App\Entity\Post;
 
-use App\Repository\Post\PostRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\Post\PostRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Cocur\Slugify\Slugify;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -56,12 +58,20 @@ class Post
         private ?Thumbnail $thumbnail = null;
 
         /**
-         * Construction: Date
+         * Relationship: Many To Many
+         */
+        #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'posts')]
+        private Collection $categories;
+
+
+        /**
+         * Construction: Date & Relationship
          */
         public function __construct()
         {
             $this->updatedAt = new \DateTimeImmutable();
             $this->createdAt = new \DateTimeImmutable();
+            $this->categories = new ArrayCollection();
         }
 
         /**
@@ -162,6 +172,30 @@ class Post
             return $this;
         }
 
+        /**
+         * Relationship
+         */
+        public function getCategories(): Collection
+        {
+            return $this->categories;
+        }
+        public function addCategory(Category $category): self
+        {
+            if(!$this->categories->contains($category))
+            {
+                $this->categories[] = $category;
+                $category->addPost($this);
+            }
+            return $this;
+        }
+        public function removeCategory(Category $category): self
+        {
+            if(!$this->categories->contains($category))
+            {
+                $category->removePost($this);
+            }
+            return $this;
+        }
 
     /**
      * Format: String
