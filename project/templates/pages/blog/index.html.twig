@@ -1,21 +1,4 @@
-{% extends "base.html.twig" %}
-
-{% block title %} Blog {% endblock %}
-{% block body %} 
-    <div class="container mx-auto">
-        <h1 class="text-5xl text-center mt-10 mb-8">Un blog avec Symfony</h1>
-
-        <!-- Loop Card Post -->
-        <div class="flex flex-row flex-wrap justify-evenly mt-8">
-            {% for post in posts %}
-                {% include "components/_card.html.twig" with {post: post} only %}
-            {% endfor %}
-        </div>
-
-        <!-- Pagination -->
-        <div class="navigation flex justify-center mb-8">
-            {{ knp_pagination_render(posts) }}
-        </div>
-
-    </div>
-{% endblock %}
+{% include "layouts/_blog.html.twig" with {
+    title: "Symfony Blog",
+    posts: posts
+} %}
