@@ -57,6 +57,47 @@ A field is characterized by:
 - whether it can be null or not
 - whether it must be unique or not
 
+#### Event Subscriber
+- Créer un dossier `EventSubscriber` dans le dossier `project/src` / Create an `EventSubscriber` folder in the `project/src` folder
+- Créer un fichier comme `DropdownCategoriesSubscriber.php` dans le dossier `project/src/EventSubscriber` / Create a file like `DropdownCategoriesSubscriber.php` in the `project/src/EventSubscriber` folder
+- Coder la fonction `getSubscribedEvents()` / Code the function `getSubscribedEvents()`
+- Coder celon vos besoins comme injecter la table des catégories dans certain URL / Code according to your needs like injecting the category table in some URL.
+Example:
+```
+use Twig\Environment;
+use App\Repository\Post\CategoryRepository;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class DropdownCategoriesSubscriber implements EventSubscriberInterface
+{
+    const ROUTES = ['post_index', 'category_index'];
+
+    public function __construct(
+        private CategoryRepository $categoryRepository,
+        private Environment $twig
+    )
+    {}
+
+    public function injectGlobalVariable(RequestEvent $event): void
+    {
+        $route = $event->getRequest()->get('_route');
+
+        if(in_array($route, DropdownCategoriesSubscriber::ROUTES))
+        {
+            $categories = $this->categoryRepository->findAll();
+            $this->twig->addGlobal('allCategories', $categories);
+        }
+    }
+    
+    public static function getSubscribedEvents()
+    {
+        return [KernelEvents::REQUEST => 'injectGlobalVariable'];
+    }
+}
+```
+
 #### Fixture_&&_FakerPHP/Faker
 
 ##### Commands

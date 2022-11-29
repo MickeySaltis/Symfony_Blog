@@ -7,6 +7,11 @@
 	<div class="container mx-auto">
 		<h1 class="text-5xl text-center mt-10 mb-8">{{ title }}</h1>
 
+		<!-- Categories -->
+		{% include "components/_dropdown.html.twig" with {
+			options: allCategories
+		} only %}
+
 		<!-- Loop Card Post -->
 		<div class="flex flex-row flex-wrap justify-evenly mt-8">
 			{% for post in posts %}
