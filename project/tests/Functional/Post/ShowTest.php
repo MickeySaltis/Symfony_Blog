@@ -198,4 +198,49 @@ class ShowTest extends WebTestCase
                 $link
             );
         }
+
+    /**
+     * Test the visibility of the post category badges
+     */
+        public function testCategoriesAreDisplayed(): void
+        {
+            $client = static::createClient();
+
+            /** @var UrlGeneratorInterface */
+            $urlGeneratorInterface = $client->getContainer()->get('router');
+
+            /** @var EntityManagerInterface */
+            $entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
+
+            /** @var PostRepository */
+            $postRepository = $entityManager->getRepository(Post::class);
+
+            /** @var Post */
+            $post = $postRepository->findOneBy([]);
+
+            $postLink = $urlGeneratorInterface->generate('post_show', ['slug' => $post->getSlug()]);
+
+            /**
+             * Test Url
+             */
+            $crawler = $client->request(
+                Request::METHOD_GET,
+                $postLink
+            );
+
+            /**
+             * Test response
+             */
+            $this->assertResponseIsSuccessful();
+            $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+            /**
+             * If the post is related to at least one category
+             */
+            if(!$post->getCategories()->isEmpty())
+            {
+                $badges = $crawler->filter('.badges')->children();
+                $this->assertGreaterThanOrEqual(1, count($badges));
+            }
+        }
 }

@@ -1,23 +1,43 @@
 <?php
 
-namespace App\Tests\Functional\Post;
+namespace App\Tests\Functional\Category;
 
+use App\Entity\Post\Category;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\Post\CategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class PostTest extends WebTestCase
+class CategoryTest extends WebTestCase
 {
     /**
-     * Testing a simple static page (Home)
+     * Testing a simple static page (Category)
      */
-        public function testBlogPageWorks(): void 
+        public function testCategoryPageWorks(): void 
         {
             /**
              * Test Url
              */
             $client = static::createClient();
-            $client->request(Request::METHOD_GET, '/');
+
+            /** @var UrlGeneratorInterface */
+            $urlGeneratorInterface = $client->getContainer()->get('router');
+
+            /** @var EntityManagerInterface */
+            $entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
+
+            /** @var CategoryRepository */
+            $categoryRepository = $entityManager->getRepository(Category::class);
+
+            /** @var Category */
+            $category = $categoryRepository->findOneBy([]);
+
+            $client->request(
+                Request::METHOD_GET,
+                $urlGeneratorInterface->generate('category_index', ['slug' => $category->getSlug()])
+            );
 
             /**
              * Test response
@@ -29,7 +49,7 @@ class PostTest extends WebTestCase
              * Test title
              */
             $this->assertSelectorExists('h1');
-            $this->assertSelectorTextContains('h1', 'Symfony Blog');
+            $this->assertSelectorTextContains('h1', 'Catégorie: '.ucfirst($category->getName()));
         }
 
     /**
@@ -41,7 +61,23 @@ class PostTest extends WebTestCase
              * Test Url
              */
             $client = static::createClient();
-            $crawler = $client->request(Request::METHOD_GET, '/');
+
+            /** @var UrlGeneratorInterface */
+            $urlGeneratorInterface = $client->getContainer()->get('router');
+
+            /** @var EntityManagerInterface */
+            $entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
+
+            /** @var CategoryRepository */
+            $categoryRepository = $entityManager->getRepository(Category::class);
+
+            /** @var Category */
+            $category = $categoryRepository->findOneBy([]);
+
+            $crawler =$client->request(
+                Request::METHOD_GET,
+                $urlGeneratorInterface->generate('category_index', ['slug' => $category->getSlug()])
+            );
 
             /**
              * Test response
@@ -83,7 +119,23 @@ class PostTest extends WebTestCase
              * Test Url
              */
             $client = static::createClient();
-            $crawler = $client->request(Request::METHOD_GET, '/');
+
+            /** @var UrlGeneratorInterface */
+            $urlGeneratorInterface = $client->getContainer()->get('router');
+
+            /** @var EntityManagerInterface */
+            $entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
+
+            /** @var CategoryRepository */
+            $categoryRepository = $entityManager->getRepository(Category::class);
+
+            /** @var Category */
+            $category = $categoryRepository->findOneBy([]);
+
+            $crawler =$client->request(
+                Request::METHOD_GET,
+                $urlGeneratorInterface->generate('category_index', ['slug' => $category->getSlug()])
+            );
 
             /**
              * Test response
@@ -104,5 +156,4 @@ class PostTest extends WebTestCase
             $this->assertResponseStatusCodeSame(Response::HTTP_OK);
             $this->assertRouteSame('category_index');
         }
-
 }
