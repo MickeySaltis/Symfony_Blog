@@ -421,6 +421,60 @@ class Post
 - Créer un fichier `BasicTest.php` dans le fichier `project/tests/Functional` avec comme classe `class BasicTest extends WebTestCase{}` et une fonction qui comprend `$client = static::createClient(); $client->request(Request::METHOD_GET, '/'); $this->assertResponseIsSuccessful();` / Create a `BasicTest.php` file in the `project/tests/Functional` file with class `class BasicTest extends WebTestCase{}` and a function that includes `$client = static::createClient(); $client->request(Request::METHOD_GET, '/'); $this->assertResponseIs Successful();`
 - Taper dans le terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` ou `docker exec -w /var/www/project www_symfony_blog php bin/phpunit --testdox` pour plus de détails / Type in the terminal `docker exec -w /var/www/project www_symfony_blog php bin/phpunit` or `docker exec -w /var/www/project www_symfony_blog php bin/phpunit --testdox` for more details
 
+### Commands
+- `php bin/console make:test`
+
+### Unit testing
+
+#### Test an entity
+- Créer un fichier `project/tests/Unit/PostTest.php` / Create a file `project/tests/Unit/PostTest.php`. Example:
+```
+<?php
+
+namespace App\Tests\Unit;
+
+use App\Entity\Post\Post;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+class PostTest extends KernelTestCase
+{
+    public function getEntity(): Post
+    {
+        return (new Post())
+            ->setTitle('Post #1')
+            ->setSlug('Post #1')
+            ->setContent('Content #1')
+            ->setUpdatedAt(new \DatetimeImmutable())
+            ->setCreatedAt(new \DatetimeImmutable());
+    }
+
+    public function testPostEntityIsValid(): void
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+
+        $post = $this->getEntity();
+
+        $errors = $container->get('validator')->validate($post);
+
+        $this->assertCount(0, $errors);
+    }
+
+    public function testInvalidName()
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+
+        $post = $this->getEntity();
+        $post->setTitle('')
+ 
+        $errors = $container->get('validator')->validate($post);
+
+        $this->assertCount(1, $errors);
+    }
+}
+```
+
 ### Functional testing
 
 #### Testing a simple static page
