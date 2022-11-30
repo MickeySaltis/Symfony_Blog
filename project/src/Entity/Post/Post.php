@@ -63,6 +63,9 @@ class Post
         #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'posts')]
         private Collection $categories;
 
+        #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'posts')]
+        private Collection $tags;
+
 
         /**
          * Construction: Date & Relationship
@@ -72,6 +75,7 @@ class Post
             $this->updatedAt = new \DateTimeImmutable();
             $this->createdAt = new \DateTimeImmutable();
             $this->categories = new ArrayCollection();
+            $this->tags = new ArrayCollection();
         }
 
         /**
@@ -131,7 +135,6 @@ class Post
             return $this;
         }
 
-
         public function getState(): ?string
         {
             return $this->state;
@@ -175,27 +178,56 @@ class Post
         /**
          * Relationship
          */
-        public function getCategories(): Collection
-        {
-            return $this->categories;
-        }
-        public function addCategory(Category $category): self
-        {
-            if(!$this->categories->contains($category))
+
+            /**
+             * Category
+            */
+            public function getCategories(): Collection
             {
-                $this->categories[] = $category;
-                $category->addPost($this);
+                return $this->categories;
             }
-            return $this;
-        }
-        public function removeCategory(Category $category): self
-        {
-            if(!$this->categories->contains($category))
+            public function addCategory(Category $category): self
             {
-                $category->removePost($this);
+                if(!$this->categories->contains($category))
+                {
+                    $this->categories[] = $category;
+                    $category->addPost($this);
+                }
+                return $this;
             }
-            return $this;
-        }
+            public function removeCategory(Category $category): self
+            {
+                if(!$this->categories->contains($category))
+                {
+                    $category->removePost($this);
+                }
+                return $this;
+            }
+
+            /**
+             * Tag
+             */
+            public function getTags(): Collection
+            {
+                return $this->tags;
+            }
+            public function addTag(Tag $tag): self
+            {
+                if(!$this->tag->contains($tag))
+                {
+                    $this->tag[] = $tag;
+                    $tag->addPost($this);
+                }
+                return $this;
+            }
+            public function removeTag(Tag $tag): self
+            {
+                if(!$this->tag->contains($tag))
+                {
+                    $tag->removePost($this);
+                }
+                return $this;
+            }
 
     /**
      * Format: String
@@ -204,4 +236,5 @@ class Post
     {
         return $this->title;
     }
+
 }

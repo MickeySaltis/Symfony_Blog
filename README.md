@@ -57,6 +57,140 @@ A field is characterized by:
 - whether it can be null or not
 - whether it must be unique or not
 
+#### Trait (Evite la répétition de code dans les fichier entité / Avoid code repetition in entity files)
+- Créer un fichier `project/src/Entity/Trait/CategoryTagTrait.php` / Create a file `project/src/Entity/Trait/CategoryTagTrait.php`
+- Coder le fichier sur les paramètres identique à plusieurs entités / Coding the file on the same parameters to several entities. Example:
+```
+use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+trait CategoryTagTrait {
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\NotBlank()]
+    private string $name;
+
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\NotBlank()]
+    private string $slug = '';
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $descriptions = null;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    #[Assert\NotNull()]
+    private \DateTimeImmutable $createdAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->posts = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->slug = (new Slugify())->slugify($this->name);
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    public function getDescriptions(): ?string
+    {
+        return $this->descriptions;
+    }
+    public function setDescriptions(?string $descriptions): self
+    {
+        $this->descriptions = $descriptions;
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+}
+```
+- Insérer la ligne `use CategoryTagTrait;` dans les fichier entité en question / Insert the line `use CategoryTagTrait;` into the entity file in question. Example:
+```
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinTable;
+use App\Entity\Trait\CategoryTagTrait;
+use App\Repository\Post\CategoryRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[UniqueEntity('slug', message: 'Ce slug existe déjà.')]
+class Category
+{
+    use CategoryTagTrait;
+
+    #[ORM\ManyToMany(targetEntity: Post::class, inversedBy: 'categories')]
+    #[JoinTable(name: 'categories_posts')]
+    private Collection $posts;
+
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+    public function addPost(Post $post): self
+    {
+        if(!$this->posts->contains($post))
+        {
+            $this->posts[] = $post;
+        }
+        return $this;
+    }
+    public function removePost(Post $post): self
+    {
+        $this->posts->removeElement($post);
+        return $this;
+    }
+}
+```
+
 #### Event Subscriber
 - Créer un dossier `EventSubscriber` dans le dossier `project/src` / Create an `EventSubscriber` folder in the `project/src` folder
 - Créer un fichier comme `DropdownCategoriesSubscriber.php` dans le dossier `project/src/EventSubscriber` / Create a file like `DropdownCategoriesSubscriber.php` in the `project/src/EventSubscriber` folder

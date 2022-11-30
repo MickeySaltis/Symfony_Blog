@@ -5,18 +5,18 @@ namespace App\Entity\Post;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinTable;
 use App\Entity\Trait\CategoryTagTrait;
-use App\Repository\Post\CategoryRepository;
+use App\Repository\Post\TagRepository;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[ORM\Entity(repositoryClass: TagRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[UniqueEntity('slug', message: 'Ce slug existe déjà.')]
-class Category
+class Tag
 {
     /**
      * Parameters
-     */ 
+     */
 
         /**
          * Trait
@@ -26,14 +26,14 @@ class Category
         /**
          * Relationship: Many To Many
          */
-        #[ORM\ManyToMany(targetEntity: Post::class, inversedBy: 'categories')]
-        #[JoinTable(name: 'categories_posts')]
+        #[ORM\ManyToMany(targetEntity: Post::class, inversedBy: 'tags')]
+        #[JoinTable(name: 'tags_posts')]
         private Collection $posts;
 
 
     /**
      * Get / Set
-     */    
+     */
 
         /**
          * Relationship
@@ -44,8 +44,7 @@ class Category
         }
         public function addPost(Post $post): self
         {
-            if(!$this->posts->contains($post))
-            {
+            if (!$this->posts->contains($post)) {
                 $this->posts[] = $post;
             }
             return $this;
@@ -55,5 +54,4 @@ class Category
             $this->posts->removeElement($post);
             return $this;
         }
-
 }
