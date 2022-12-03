@@ -22,12 +22,29 @@
         {% include "components/_share.html.twig" %}
 
         <!-- Categories / Content -->
-        <div class="mb-4 px-4">
+        <div class=" px-4">
             {% include "components/_badges.html.twig" with {
                 badges: post.categories
             } only %}
             <p class="text-justify first-line:uppercase first-line:tracking-widest first-letter:text-7xl first-letter:font-bold first-letter:text-gray-900 dark:first-letter:text-gray-100 first-letter:mr-3 first-letter:float-left my-2"> {{ post.content }} </p>
-            <p class="text-right my-8">Dernière mis à jour le {{ post.updatedAt|date('d/m/Y') }}
+            <p class="text-right mt-6">Dernière mis à jour le {{ post.updatedAt|date('d/m/Y') }}
+        </div>
+        <div class="mx-auto my-6">
+            <ul class="flex flex-row justify-center text-xs">
+                <li class="font-medium text-gray-900 dark:text-white">
+                    Tags: &nbsp;
+                </li>
+                {% for tag in post.tags %}
+                    <li class="bg-green-100 text-green-800 text-xs font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900 hover:bg-indigo-100 hover:text-indigo-800">
+                        <a href="{{ path('tag_index', {slug: tag.slug}) }}">
+                            {{tag.name}}
+                        </a>
+                        {% if not loop.last %}
+                            <span> &nbsp; </span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
 
         <!-- Back -->

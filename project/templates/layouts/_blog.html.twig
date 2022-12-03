@@ -8,9 +8,11 @@
 		<h1 class="text-5xl text-center mt-10 mb-8">{{ title }}</h1>
 
 		<!-- Categories -->
-		{% include "components/_dropdown.html.twig" with {
-			options: allCategories
-		} only %}
+		{% if allCategories is defined %}
+			{% include "components/_dropdown.html.twig" with {
+				options: allCategories
+			} only %}
+		{% endif %}
 
 		<!-- Loop Card Post -->
 		<div class="flex flex-row flex-wrap justify-evenly mt-8">

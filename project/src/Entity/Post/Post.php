@@ -213,16 +213,16 @@ class Post
             }
             public function addTag(Tag $tag): self
             {
-                if(!$this->tag->contains($tag))
+                if(!$this->tags->contains($tag))
                 {
-                    $this->tag[] = $tag;
+                    $this->tags[] = $tag;
                     $tag->addPost($this);
                 }
                 return $this;
             }
             public function removeTag(Tag $tag): self
             {
-                if(!$this->tag->contains($tag))
+                if(!$this->tags->contains($tag))
                 {
                     $tag->removePost($this);
                 }

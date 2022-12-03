@@ -4,6 +4,7 @@ namespace App\Repository\Post;
 
 use App\Entity\Post\Category;
 use App\Entity\Post\Post;
+use App\Entity\Post\Tag;
 use App\Model\SearchData;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
@@ -52,12 +53,13 @@ class PostRepository extends ServiceEntityRepository
 
         /**
          * Search posts by state from the most recent
-         * Option: Category
+         * Option: Category / Tag
          * Pagination: 9 Posts per page
          */
         public function findPublished(
             int $page,
             ?Category $category = null,
+            ?Tag $tag = null,
         ): PaginationInterface
         {
             /**
@@ -77,6 +79,17 @@ class PostRepository extends ServiceEntityRepository
                 ->join('posts.categories', 'category')
                 ->andWhere(':category IN (category)')
                 ->setParameter('category', $category);
+            }
+
+            /**
+             * If there is a Tag variable
+             */
+            if(isset($tag))
+            {
+                $data = $data
+                ->join('posts.tags', 'tag')
+                ->andWhere(':tag IN (tag)')
+                ->setParameter('tag', $tag);
             }
 
             $data->getQuery()
