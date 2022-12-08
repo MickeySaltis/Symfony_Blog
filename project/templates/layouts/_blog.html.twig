@@ -7,6 +7,11 @@
 	<div class="container mx-auto">
 		<h1 class="text-5xl text-center mt-10 mb-8">{{ title }}</h1>
 
+		<!-- Form Search Data --> 
+		{% include "components/_search_data.html.twig" with {
+			form: form,
+		} only %}
+
 		<!-- Categories -->
 		{% if allCategories is defined %}
 			{% include "components/_dropdown.html.twig" with {
