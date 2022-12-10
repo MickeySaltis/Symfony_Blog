@@ -26,6 +26,18 @@ class SearchType extends AbstractType
                 'class' => Category::class,
                 'expanded' => true,
                 'multiple' => true,
+                'choice_label' => 'name',
+                // 'choice_attr' => function(Category $category) {
+                //     if($category->getId() > 1){
+                //         return ['class' => 'ml-3'];
+                //     }  
+                // },
+                // 'choice_attr' => function(?Category $category) {
+                //     return $category ? ['class' => 'ml-3'] :[];
+                // },
+                // 'choice_attr' => function () {
+                //     return ['class' => ''];
+                // },
             ]);
     }
 
