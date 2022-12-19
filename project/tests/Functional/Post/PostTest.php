@@ -4,8 +4,10 @@ namespace App\Tests\Functional\Post;
 
 use App\Entity\Post\Tag;
 use App\Entity\Post\Post;
+use App\Entity\Post\Category;
 use App\Repository\Post\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\Post\CategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -110,6 +112,9 @@ class PostTest extends WebTestCase
             $this->assertRouteSame('category_index');
         }
 
+    /**
+     * Test of the form to filter the posts 
+     * */    
         public function testSearchBarWorks(): void
         {
             $client = static::createClient();
@@ -123,11 +128,17 @@ class PostTest extends WebTestCase
             /** @var PostRepository */
             $postRepository = $entityManager->getRepository(Post::class);
 
+            /** @var CategoryRepository */
+            $categoryRepository = $entityManager->getRepository(Category::class);
+
             /** @var Post */
             $post = $postRepository->findOneBy([]);
 
             /** @var Tag */
             $tag = $post->getTags()[0];
+
+            /** @var Category */
+            $category = $categoryRepository->findOneBy([]);
 
             /**
              * Test Url
@@ -154,7 +165,10 @@ class PostTest extends WebTestCase
             foreach($searchs as $search) 
             {
                 /* Search Form */
-                $form = $crawler->filter('form[name=search]')->form(['search[q]' => $search]);
+                $form = $crawler->filter('form[name=search]')->form([
+                    'search[q]' => $search,
+                    'search[categories][0]' => 1,
+                ]);
 
                 /* Submit */
                 $crawler = $client->submit($form);
@@ -167,26 +181,48 @@ class PostTest extends WebTestCase
                 $this->assertRouteSame('post_index');
 
                 /**
-                 *  Title Post / Number Posts / Count
+                 *  Posts / Number Posts / Count
                  */
-                $postsTitle = $crawler->filter('div.card h5');
+                $posts = $crawler->filter('div.card');
                 $nbPosts = count($crawler->filter('div.card'));
                 $count = 0;
 
                 /**
                  * Verification of the concordance of the results with the research
                  */
-                foreach($postsTitle as $title)
+                foreach($posts as $index => $post)
                 {
-                    if(str_contains($title->textContent, $search) || str_contains($tag->getName(), $search))
+                    $title = $crawler->filter('div.card h5')->getNode($index);
+
+                    /* If the title or tag of the post contains the values of the search */
+                    if(
+                        str_contains($title->textContent, $search) || 
+                        str_contains($tag->getName(), $search)
+                    )
                     {
-                        $count++;
+                        $postCategories = $crawler->filter('div.card div.badges')->getNode($index)->childNodes;
+
+                        /* Loop for post categories */
+                        for($i = 1; $i < $postCategories ->count(); $i++) 
+                        {
+                            $postCategory = $postCategories->item($i);
+                            $name = trim($postCategory->textContent);
+
+                            /* If the category of the post is identical to the category of the form */
+                            if($name === $category->getName())
+                            {
+                                $count++;
+                            }
+                        }
                     }
                 }
                 $this->assertEquals($nbPosts, $count);
             }
         }
 
+    /**
+     * Test result if there is no value submitted in the filter form 
+     * */    
         public function testSearchBarReturnsNoItems(): void
         {
             $client = static::createClient();
@@ -222,5 +258,6 @@ class PostTest extends WebTestCase
              * Verification that there is no result
              */
             $this->assertSelectorNotExists('div.card');
+            $this->assertSelectorExists('form[name=search]');
         }
 }
