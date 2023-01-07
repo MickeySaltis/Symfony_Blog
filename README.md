@@ -243,6 +243,26 @@ class DropdownCategoriesSubscriber implements EventSubscriberInterface
 #### UUID
 - `composer require symfony/uid`
 
+#### Security
+- `project/config/packages/security.yaml`
+```
+providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: security_login
+                check_path: security_login
+```
+
 ## Twig
 
 ### Twig String-Extra

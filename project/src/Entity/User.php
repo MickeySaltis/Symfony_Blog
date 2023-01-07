@@ -71,7 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         #[ORM\PrePersist]
         public function prePersist(): void
         {
-            $this->avatar= 'https://avatars.dicebear.com/api/adventurer-neutral/'. $this->email .'.svg';
+            $this->avatar = 'https://avatars.dicebear.com/api/adventurer-neutral/'. $this->email .'.svg';
         }
 
     /**
@@ -81,7 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         public function preUpdate(): void
         {
             $this->updatedAt = new \DateTimeImmutable();
-            $this->avatar= 'https://avatars.dicebear.com/api/adventurer-neutral/'. $this->email .'.svg';
+            $this->avatar = 'https://avatars.dicebear.com/api/adventurer-neutral/'. $this->email .'.svg';
         }
 
     /**
