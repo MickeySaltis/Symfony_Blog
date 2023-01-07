@@ -82,7 +82,7 @@ class Post
          * Lifecycle: Persist
          */
         #[ORM\PrePersist] 
-        public function prePersist()
+        public function prePersist(): void
         {
             $this->slug = (new Slugify())->slugify($this->title);
         }
@@ -91,7 +91,7 @@ class Post
          * Lifecycle: Update
          */
         #[ORM\PreUpdate]
-        public function preUpdate()
+        public function preUpdate(): void
         {
             $this->updatedAt = new \DateTimeImmutable();
         }

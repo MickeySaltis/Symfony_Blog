@@ -34,6 +34,8 @@ docker-stop:
 	$(DOCKER_COMPOSE) stop
 	@$(call RED,"The containers are now stopped.")
 
+stopAll: ## Arrêter tout les containers en cours
+	$(DOCKER) stop $$(docker ps -a -q)
 
 ## —— ✅ Test ——
 .PHONY: tests
