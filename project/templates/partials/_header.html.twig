@@ -3,10 +3,38 @@
 		<a href="{{ path('post_index') }}" class="flex items-center">
 			<span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Symfony Blog</span>
 		</a>
+		{% if app.user %}
+
+		<img id="avatarButton" type="button" onclick="dropdownNavbar()" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-full cursor-pointer" src="{{ app.user.avatar }}" alt="User dropdown">
+
+		<!-- Dropdown menu -->
+		<div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+			<div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+			<div>{{ app.user.firstName }} {{ app.user.lastName }}</div>
+			<div class="font-medium truncate">{{ app.user.email }}</div>
+			</div>
+			<ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+			<li>
+				<a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+			</li>
+			<li>
+				<a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+			</li>
+			<li>
+				<a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+			</li>
+			</ul>
+			<div class="py-1">
+			<a href="{{ path('security_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
+			</div>
+		</div>
+
+		{% else %}
 		<div class="flex items-center">
 			<a href="#!" class="mr-6 text-sm font-medium text-gray-500 dark:text-white hover:underline">Inscription</a>
 			<a href="{{ path('security_login') }}" class="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline">Connexion</a>
 		</div>
+		{% endif %}
 	</div>
 </nav>
 <nav class="text-white bg-gradient-to-r from-blue-600 via-blue-500 to-blue-300">

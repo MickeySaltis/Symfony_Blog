@@ -243,7 +243,7 @@ class DropdownCategoriesSubscriber implements EventSubscriberInterface
 #### UUID
 - `composer require symfony/uid`
 
-#### Security
+#### Security (Login/Logout)
 - `project/config/packages/security.yaml`
 ```
 providers:
@@ -261,6 +261,11 @@ firewalls:
             form_login:
                 login_path: security_login
                 check_path: security_login
+            logout:
+                path: security_logout
+            remember_me:
+                secret: '%kernel.secret'
+                lifetime: 604800
 ```
 
 ## Twig
