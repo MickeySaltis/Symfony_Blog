@@ -4,14 +4,17 @@
 			<img src="{{ vich_uploader_asset(post.thumbnail, 'imageFile') }}" alt="{{ post.thumbnail.imageName }}" class="rounded-t-lg">
 		</a>
 	{% endif %}
+	
 	<div class="p-5">
 		<a href="{{ path('post_show', {slug: post.slug}) }}">
-			<h5 class=" text-2xl font bold tracking-tight text-gray-900 dark:text-white">
+			<h5 class=" text-2xl font bold tracking-tight text-gray-900 dark:text-white text-center">
 				{{post.title|capitalize}}</h5>
 		</a>
+		{% include "components/_like.html.twig" %}
 		{% include "components/_badges.html.twig" with {
                 badges: post.categories
-            } only %}
+            } only 
+		%}
 		<p class="text-gray-700 text-base mb-4">
 			{{post.content|u.truncate(160,"...")}}
 		</p>
