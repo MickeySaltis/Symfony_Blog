@@ -148,4 +148,55 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
             $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         }
+
+        /**
+         * Test Remember Me
+         */
+        public function testLoginWithRememberMe(): void
+        {
+            $client = static::createClient();
+
+            /** @var UrlGeneratorInterface */
+            $urlGenerator = $client->getContainer()->get('router');
+
+            /** Test Not Has Cookie */
+            $this->assertBrowserNotHasCookie('REMEMBERME');
+
+            /**
+             * Url
+             */
+            $crawler = $client->request(
+                Request::METHOD_GET,
+                $urlGenerator->generate('security_login')
+            );
+
+            /**
+             * Form
+             */
+            $form = $crawler->filter('form[name=login]')->form([
+                '_username' => 'admin@admin.com',
+                '_password' => 'password',
+                '_remember_me' => 'on'
+            ]);
+
+            $client->submit($form);
+
+            /**
+             * Login
+             */
+            $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+
+            /**
+             * Redirection
+             */
+            $client->followRedirect();
+
+            $this->assertRouteSame('post_index');
+
+            $this->assertResponseIsSuccessful();
+            $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+            /** Test Has Cookie */
+            $this->assertBrowserHasCookie('REMEMBERME');
+        }
     }
