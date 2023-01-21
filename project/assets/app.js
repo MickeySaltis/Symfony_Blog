@@ -8,9 +8,26 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 import 'tw-elements';
+import Like from './scripts/like';
+import ButtonNavbar from './scripts/buttonNavbar';
 
-// Js
-import './scripts/button.js';
+
+document.addEventListener('DOMContentLoaded', () =>{
+    
+    /* Like System */
+    const likeElements = [].slice.call(document.querySelectorAll('a[data-action="like"]'));
+    if(likeElements)
+    {
+        new Like(likeElements);
+    }
+
+    /* Profil Navbar System */
+    const profilNavbar = document.querySelectorAll('img[data-action="profilNavbar"]');
+    if(profilNavbar)
+    {
+        new ButtonNavbar(profilNavbar);
+    }
+})
 
 // start the Stimulus application
 // import './bootstrap';

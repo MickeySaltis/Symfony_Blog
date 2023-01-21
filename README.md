@@ -681,6 +681,11 @@ knp_paginator:
 - Dans le fichier `project/config/packages/knp_paginator.yaml` modifier la ligne `pagination` de `template` avec les noms des fichiers situé dans le dossier `project/vendor/knplabs/knp-paginator-bundle/templates/Pagination`. Exemple: `@KnpPaginator/Pagination/tailwindcss_pagination.html.twig`. Ou créer un fichier et mettre à jour le fichier `project/config/packages/knp_paginator.yaml`. Exemple: `components/_pagination.html.twig` / In the `project/config/packages/knp_paginator.yaml` file modify the `pagination` line of `template` with the names of the files located in the `project/vendor/knplabs/knp-paginator-bundle/templates/Pagination` folder. Example: `@KnpPaginator/Pagination/tailwindcss_pagination.html.twig`. Or create a file and update the file `project/config/packages/knp_paginator.yaml`. Example: `components/_pagination.html.twig`
 
 
+## Axios
+- [Axios Doc](https://www.npmjs.com/package/axios)
+- installation / install `docker exec -w /var/www/project www_symfony_blog npm install axios`
+
+
 ## Bonus
 
 ### Dicebear Avatars
