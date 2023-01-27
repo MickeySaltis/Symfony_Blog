@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Post\Post;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LikeController extends AbstractController
 {
     #[Route('/like/article/{id}', name: 'like_post')]
+    #[IsGranted('ROLE_USER')]
     public function like(Post $post, EntityManagerInterface $manager): Response
     {
         $user = $this->getUser();

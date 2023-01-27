@@ -685,6 +685,29 @@ knp_paginator:
 - [Axios Doc](https://www.npmjs.com/package/axios)
 - installation / install `docker exec -w /var/www/project www_symfony_blog npm install axios`
 
+## Panther
+- [ Panther Doc](https://github.com/symfony/panther)
+- Instalation: `docker exec -ti www_symfony_blog bash` & `cd project` & `composer req symfony/panther` & `composer require --dev dbrekelmans/bdi && vendor/bin/bdi detect drivers`
+- Comment in `project/phpunit.xml.dist` : 
+```
+    <php>
+        <ini name="display_errors" value="1" />
+        <ini name="error_reporting" value="-1" />
+        <server name="APP_ENV" value="test" force="true" />
+        <server name="SHELL_VERBOSITY" value="-1" />
+        <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
+        <server name="DATABASE_URL" value="mysql://root:@db_symfony_blog:3306/symfony" force="true" />
+    </php>
+
+```
+- Comment in `project/vendor/.env.test`:
+```
+    PANTHER_CHROME_DRIVER_BINARY=%kernel.project_dir%/project/drivers
+    PANTHER_NO_HEADLESS=0
+    PANTHER_NO_SANDBOX=1
+```
+
 
 ## Bonus
 
