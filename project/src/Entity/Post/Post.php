@@ -73,6 +73,12 @@ class Post
         private Collection $likes;
 
         /**
+         * Relationship: Many To Many
+         */
+        #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', orphanRemoval: true)]
+        private Collection $comments;
+
+        /**
          * Construction: Date & Relationship
          */
         public function __construct()
@@ -82,6 +88,7 @@ class Post
             $this->categories = new ArrayCollection();
             $this->tags = new ArrayCollection();
             $this->likes = new ArrayCollection();
+            $this->comments = new ArrayCollection();
         }
 
         /**
@@ -262,6 +269,34 @@ class Post
             public function howManyLikes(): int
             {
                 return count($this->likes);
+            }
+
+            /**
+             * Comments
+             */
+            public function getComments(): Collection
+            {
+                return $this->comments;
+            }
+            public function addComment(Comment $comment): self
+            {
+                if(!$this->comments->contains($comment))
+                {
+                    $this->comments[] = $comment;
+                    $comment->setPost($this);
+                }
+                return $this;
+            }
+            public function removeComment(Comment $comment): self
+            {
+                if($this->comments->removeElement($comment))
+                {
+                    if($comment->getPost() === $this)
+                    {
+                        $comment->setPost(null);
+                    }
+                }
+                return $this;
             }
 
     /**

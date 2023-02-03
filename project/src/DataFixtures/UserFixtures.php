@@ -28,10 +28,10 @@ class UserFixtures extends Fixture
         $manager->persist($user);
 
         /**
-         * Generate 10 Users with Faker
+         * Generate 5 Users with Faker
          */
         $faker = Factory::create('fr_FR');
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $user = new User();
             $user->setEmail($faker->email())
                 ->setLastName($faker->lastName())

@@ -67,10 +67,10 @@ class CategoryTagFixtures extends Fixture implements DependentFixtureInterface
         }
 
         /**
-         * Add tags (random 1 to 5) to each post
+         * Add tags (random 1 to 3) to each post
          */
         foreach ($posts as $post) {
-            for ($i = 0; $i < mt_rand(1, 5); $i++) {
+            for ($i = 0; $i < mt_rand(1, 3); $i++) {
                 $post->addTag(
                     $tags[mt_rand(0, count($tags) - 1)]
                 );

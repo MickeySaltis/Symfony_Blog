@@ -12,10 +12,10 @@ class PostFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         /**
-         * Generate 50 Posts with Faker
+         * Generate 25 Posts with Faker
          */
         $faker = Factory::create('fr_FR');
-        for($i=0; $i < 50; $i++) {
+        for($i=0; $i < 25; $i++) {
             $post = new Post();
             $post->setTitle($faker->words(4, true))
                 ->setContent($faker->realText(1800))
