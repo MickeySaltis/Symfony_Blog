@@ -198,4 +198,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->plainPassword = null;
         }
 
+    /**
+     * String
+     */
+    public function __toString(): string
+    {
+        return $this->firstName.' '. $this->lastName;
+    }
+
 }

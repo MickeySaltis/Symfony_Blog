@@ -45,6 +45,17 @@
                     </li>
                 {% endfor %}
             </ul>
+
+            <!-- Comments -->
+            <div class="my-5">
+                <h2 class="text 2xl">Commentaires</h2>
+                {% for comment in post.comments %}
+                    {% include "components/_comment.html.twig" with {
+                        comment: comment
+                    } only %}
+                {% endfor %}
+            </div>
+
         </div>
 
         <!-- Back -->
