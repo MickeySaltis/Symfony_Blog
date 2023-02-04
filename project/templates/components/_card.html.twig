@@ -10,11 +10,16 @@
 			<h5 class=" text-2xl font bold tracking-tight text-gray-900 dark:text-white text-center">
 				{{post.title|capitalize}}</h5>
 		</a>
+		
+		<!-- Like -->
 		{% include "components/_like.html.twig" %}
+
+		<!-- Badge -->
 		{% include "components/_badges.html.twig" with {
                 badges: post.categories
             } only 
 		%}
+
 		<p class="text-gray-700 text-base mb-4">
 			{{post.content|u.truncate(160,"...")}}
 		</p>

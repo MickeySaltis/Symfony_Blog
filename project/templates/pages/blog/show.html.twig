@@ -13,6 +13,14 @@
             <h2 class="mt-1">Publié le {{ post.createdAt|date('d/m/Y') }}</h2>
         </div>
 
+        <!-- Flashe message -->
+        {% for message in app.flashes('success') %}
+            {% include "components/_alert.html.twig" with {
+                'color': 'green',
+                'message': message
+            }%}
+        {% endfor %}
+
         <!-- Image -->
         {% if post.thumbnail %}
             <img class="max-w-lg h-auto rounded-lg transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0 shadow-xl dark:shadow-gray-800 my-3" src="{{ vich_uploader_asset(post.thumbnail, 'imageFile') }}" alt="{{ post.thumbnail.imageName }}">
@@ -46,9 +54,35 @@
                 {% endfor %}
             </ul>
 
+            <!-- Back -->
+            <div class="flex justify-center">
+                <a href="{{ path('post_index') }}" type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mt-6 mb-2">Retourner au blog</a>
+            </div>
+
             <!-- Comments -->
             <div class="my-5">
-                <h2 class="text 2xl">Commentaires</h2>
+                <h2 class="text-2xl ml-2">
+                    {{post.comments|length <= 1 ? 'Commentaire' : 'Commentaires'}}
+                </h2>
+
+                <!-- Form -->
+                {% if app.user %}
+                    <div class="mx-3 pt-3">
+                        {{form_start(form)}}
+                            <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                                {{form_label(form.content, null, 
+                                    {'attr': { 'class': 'sr-only'}})}}
+                                {{form_widget(form.content)}}
+                            </div>
+                            <button type="submit"
+                                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                Poster le commentaire
+                            </button> 
+                        {{form_end(form)}}                
+                    </div>
+                {% endif %}
+
+                <!-- Comments -->
                 {% for comment in post.comments %}
                     {% include "components/_comment.html.twig" with {
                         comment: comment
@@ -56,11 +90,6 @@
                 {% endfor %}
             </div>
 
-        </div>
-
-        <!-- Back -->
-        <div class="flex justify-center">
-            <a href="{{ path('post_index') }}" type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Retourner au blog</a>
         </div>
 
     </div>
