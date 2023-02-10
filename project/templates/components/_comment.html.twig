@@ -8,6 +8,22 @@
 						<time pubdate datetime="2022-02-08" title="{{comment.createdAt|date('d/m/Y')}}">{{comment.createdAt|date('d/m/Y')}}</time>
 					</p>
 				</div>
+				{% if app.user == comment.author %}
+					<div class="comment__delete">
+					<form name="comment[delete]" method="post" action=" {{path('comment_delete', {'id': comment.id})}}">
+						<input type="hidden" name="_method" value="DELETE">
+						<input type="hidden" name="_token" value=" {{csrf_token('delete' ~ comment.id)}} ">
+						<button 
+							class="inline-flex items-center p-2 text-sm font-medium text-center text-red-700 bg-white rounded-lg hover:bg-red-200 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-red-700 dark:focus:ring-red-600"
+							type="submit">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+							<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+							</svg>
+							<span class="sr-only">Supprimer le commentaire</span>
+						</button>
+					</form>
+					</div>
+				{% endif %}
 			</footer>
 			<p class="text-gray-500 dark:text-gray-400">
 				{{ comment.content }}

@@ -5,6 +5,7 @@ namespace App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Post\Post;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\Post\CommentRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass:CommentRepository::class)]
