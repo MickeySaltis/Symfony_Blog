@@ -241,7 +241,7 @@ class DropdownCategoriesSubscriber implements EventSubscriberInterface
 - `make database-init` (Initier la base de donnée / Initiate the database)
 
 #### UUID
-- `composer require symfony/uid`
+- `docker exec -w /var/www/project www_symfony_blog composer require symfony/uid`
 
 #### Security (Login/Logout)
 - `project/config/packages/security.yaml`
